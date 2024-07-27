@@ -19,12 +19,23 @@ jobs:
           sudo usermod -aG docker $USER
           newgrp docker
 
-      - name: install the gcloud cli
-        uses: google-github-actions/setup-gcloud@v0.5.0
+      - id: "auth"
+        uses: "google-github-actions/auth@v2"
         with:
-          project_id: wordpress-test-project-429717
-          service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-          export_default_credentials:
+          credentials_json: "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}"
+
+      - name: "Set up Cloud SDK"
+        uses: "google-github-actions/setup-gcloud@v2"
+
+      - name: "Use gcloud CLI"
+        run: "gcloud info"
+
+      # - name: install the gcloud cli
+      #   uses: google-github-actions/setup-gcloud@v0.5.0
+      #   with:
+      #     project_id: wordpress-test-project-429717
+      #     service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+      #     export_default_credentials:
 
       # - name: build and push the docker image
       #   env:
