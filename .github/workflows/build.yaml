@@ -46,7 +46,7 @@ jobs:
 
       - name: SSH into Google VM, pull Docker image, and download file
         run: |
-          gcloud compute ssh ${{ secrets.GCP_VM_INSTANCE }} --zone ${{ secrets.GCP_VM_ZONE }} --command "
+          gcloud compute ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }} ${{ secrets.GCP_VM_INSTANCE }} --zone ${{ secrets.GCP_VM_ZONE }} --command "
             gcloud auth configure-docker;
             docker pull gcr.io/${{ secrets.GCP_PROJECT_ID }}/gcp-wordpress-demo;
           "
