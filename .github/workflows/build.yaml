@@ -12,12 +12,21 @@ jobs:
       - name: code checkout
         uses: actions/checkout@v2
 
+      - name: Set up Docker
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker.io
+          sudo systemctl start docker
+          sudo systemctl enable docker
+          sudo usermod -aG docker $USER
+          newgrp docker
+
       - name: install the gcloud cli
         uses: google-github-actions/setup-gcloud@v0.5.0
         with:
           project_id: wordpress-test-project-429717
           service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-          export_default_credentials: true
+          export_default_credentials:
 
       # - name: build and push the docker image
       #   env:
