@@ -19,10 +19,34 @@ jobs:
           service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
           export_default_credentials: true
 
-      - name: build and push the docker image
-        env:
-          GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
+      # - name: build and push the docker image
+      #   env:
+      #     GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
+      #   run: |
+      #     gcloud auth configure-docker us-central1-docker.pkg.dev
+      #     docker build -t us-central1-docker.pkg.dev/$GOOGLE_PROJECT/wordpress-portfolio/nginx:latest .
+      #     docker tag wordpress-portfolio gcr-io/$GOOGLE_PROJECT/wordpress-portfolio/nginx:latest
+      #     docker push us-central1-docker.pkg.dev/$GOOGLE_PROJECT/wordpress-portfolio/nginx:latest
+
+      # - name: push in vm instance
+      #   env:
+      #     GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
+      #   run: |
+      #     gcloud computer ssh $VM_INSTANCE --zone $ZONE --command "
+      #     gcloud auth configure-docker; docker pull gcr."
+
+      - name: Authenticate Docker to Google Cloud
+        run: gcloud auth configure-docker
+
+      - name: Build Docker image
+        run: docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/gcp-wordpress-demo .
+
+      - name: Push Docker image to Google Container Registry
+        run: docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/gcp-wordpress-demo
+
+      - name: SSH into Google VM, pull Docker image, and download file
         run: |
-          gcloud auth configure-docker us-central1-docker.pkg.dev
-          docker build -t us-central1-docker.pkg.dev/$GOOGLE_PROJECT/wordpress-portfolio/nginx:latest .
-          docker push us-central1-docker.pkg.dev/$GOOGLE_PROJECT/wordpress-portfolio/nginx:latest
+          gcloud compute ssh ${{ secrets.GCP_VM_INSTANCE }} --zone ${{ secrets.GCP_VM_ZONE }} --command "
+            gcloud auth configure-docker;
+            docker pull gcr.io/${{ secrets.GCP_PROJECT_ID }}/gcp-wordpress-demo;
+          "
