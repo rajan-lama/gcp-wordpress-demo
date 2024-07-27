@@ -15,7 +15,7 @@ jobs:
       - name: install the gcloud cli
         uses: google-github-actions/setup-gcloud@v0.5.0
         with:
-          project_id: ${{ secrets.GOOGLE_PROJECT }}
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
           service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
           export_default_credentials: true
 
@@ -46,7 +46,7 @@ jobs:
 
       - name: SSH into Google VM, pull Docker image, and download file
         run: |
-          gcloud compute ssh ${{ secrets.GCP_VM_INSTANCE }} --zone ${{ secrets.GCP_VM_ZONE }} --command "
+          gcloud compute ssh test-wordpress-portfolio} --zone ${{ secrets.GCP_VM_ZONE }} --command "
             gcloud auth configure-docker;
             docker pull gcr.io/${{ secrets.GCP_PROJECT_ID }}/gcp-wordpress-demo;
           "
