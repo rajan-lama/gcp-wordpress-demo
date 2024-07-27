@@ -46,7 +46,7 @@ jobs:
 
       - name: SSH into Google VM, pull Docker image, and download file
         run: |
-          gcloud compute ssh test-wordpress-portfolio} --zone us-central1-c --command "
+          gcloud compute ssh test-wordpress-portfolio --zone us-central1-c --command "
             gcloud auth configure-docker;
             docker pull gcr.io/wordpress-test-project-429717/gcp-wordpress-demo;
           "
