@@ -20,7 +20,7 @@ jobs:
         with:
           registry: gcr.io
           username: _json_key
-          password: ${{ secrets.GCP_SA_KEY }}
+          password: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
 
       - id: "auth"
         uses: "google-github-actions/auth@v2"
